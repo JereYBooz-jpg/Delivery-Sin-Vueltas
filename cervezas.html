@@ -369,6 +369,24 @@
         #close-cart-btn {
             background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;
         }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .remove-from-cart-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -592,10 +610,21 @@
                 }
 
                 let total = 0;
-                cart.forEach(item => {
-                    const itemElem = document.createElement('div');
-                    itemElem.innerHTML = `<p>${item.name} - <strong>$${formatPrice(item.price)}</strong></p>`;
-                    cartItemsContainer.appendChild(itemElem);
+                cart.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+
+                    const itemInfo = document.createElement('p');
+                    itemInfo.innerHTML = `${item.name} - <strong>$${formatPrice(item.price)}</strong>`;
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-from-cart-btn';
+                    removeBtn.textContent = 'Eliminar';
+                    removeBtn.dataset.index = index;
+
+                    itemDiv.appendChild(itemInfo);
+                    itemDiv.appendChild(removeBtn);
+                    cartItemsContainer.appendChild(itemDiv);
                     total += item.price;
                 });
 
@@ -610,6 +639,14 @@
                     renderCartItems();
                     cartModal.classList.add('visible');
                 }
+            }
+
+            // Función para eliminar un producto del carrito
+            function removeFromCart(itemIndex) {
+                cart.splice(itemIndex, 1);
+                saveCart();
+                updateCartUI();
+                renderCartItems();
             }
 
             // Función para generar el mensaje de WhatsApp y redirigir
@@ -654,6 +691,14 @@
             floatingCart.addEventListener('click', toggleCartModal);
             closeCartBtn.addEventListener('click', toggleCartModal);
             checkoutBtn.addEventListener('click', handleCheckout);
+
+            // Event listener para los botones de eliminar en el carrito
+            cartItemsContainer.addEventListener('click', (event) => {
+                if (event.target.classList.contains('remove-from-cart-btn')) {
+                    const itemIndex = parseInt(event.target.dataset.index);
+                    removeFromCart(itemIndex);
+                }
+            });
 
             // --- INICIALIZACIÓN ---
             loadProducts();
