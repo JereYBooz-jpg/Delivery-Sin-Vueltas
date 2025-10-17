@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cervezas - DeliverySinVueltas</title> <!-- Título específico para la página de cervezas -->
+    <title>Cervezas - Delivery Sin Vueltas Rosario</title> <!-- Título específico para la página de cervezas -->
     
     <!-- Importación de fuentes personalizadas desde Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
@@ -28,7 +28,11 @@
             color: var(--light-text);
             margin: 0;
             padding: 0;
-            background-color: var(--dark-bg);
+            background-image: url('https://plus.unsplash.com/premium_photo-1683121131492-9ae8cdfea4f7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9uZG8lMjBkZSUyMGZpZXN0YXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000');
+            background-size: cover; /* Cubre todo el espacio disponible */
+            background-position: center; /* Centra la imagen */
+            background-attachment: fixed; /* La imagen de fondo no se mueve con el scroll */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
         }
 
         /* Contenedor principal para centrar el contenido */
@@ -57,10 +61,19 @@
 
         /* Estilo para el logo */
         .logo {
-            font-family: var(--font-title);
-            color: var(--accent-color);
-            margin: 0;
             text-decoration: none; /* Quitar subrayado si el logo es un enlace */
+        }
+
+        .logo h1 {
+            font-family: var(--font-title);
+            margin: 0;
+            /* Efecto de texto tornasolado/iridiscente */
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-animation 4s linear infinite;
         }
 
         /* Estilo para el ícono del carrito para que parezca un botón */
@@ -149,9 +162,16 @@
             }
         }
 
+        /* Animación para el degradado del logo */
+        @keyframes gradient-animation {
+            to {
+                background-position: -200% center;
+            }
+        }
+
         /* --- Estilos de la Sección Principal (Hero) --- */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=2070') center/cover no-repeat;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://www.clarin.com/img/2022/08/04/cerveza-brahma-una-marca-originaria___huEYzKwxs_720x0__1.jpg') center/cover no-repeat;
             color: #FFFFFF;
             text-align: center;
             padding: 100px 0;
@@ -409,7 +429,7 @@
         <header>
             <div class="container">
                 <!-- El logo ahora es un enlace a la página de inicio -->
-                <a href="index.html" class="logo"><h1>DeliverySinVueltas</h1></a>
+                <a href="index.html" class="logo"><h1>Delivery Sin Vueltas Rosario</h1></a>
                 <nav id="main-nav"> <!-- Barra de navegación principal -->
                     <ul>
                         <li><a href="index.html">combos</a></li>

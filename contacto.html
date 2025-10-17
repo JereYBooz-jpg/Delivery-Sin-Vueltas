@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto - DeliverySinVueltas</title>
+    <title>Contacto - Delivery Sin Vueltas Rosario</title>
     
     <!-- Importación de fuentes personalizadas desde Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
@@ -28,7 +28,11 @@
             color: var(--light-text);
             margin: 0;
             padding: 0;
-            background-color: var(--dark-bg);
+            background-image: url('https://plus.unsplash.com/premium_photo-1683121131492-9ae8cdfea4f7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9uZG8lMjBkZSUyMGZpZXN0YXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000');
+            background-size: cover; /* Cubre todo el espacio disponible */
+            background-position: center; /* Centra la imagen */
+            background-attachment: fixed; /* La imagen de fondo no se mueve con el scroll */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -64,10 +68,19 @@
 
         /* Estilo para el logo */
         .logo {
-            font-family: var(--font-title);
-            color: var(--accent-color);
-            margin: 0;
             text-decoration: none;
+        }
+
+        .logo h1 {
+            font-family: var(--font-title);
+            margin: 0;
+            /* Efecto de texto tornasolado/iridiscente */
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-animation 4s linear infinite;
         }
 
         /* Estilo para el ícono del carrito para que parezca un botón */
@@ -153,6 +166,13 @@
             }
             nav ul li {
                 margin: 20px 0;
+            }
+        }
+
+        /* Animación para el degradado del logo */
+        @keyframes gradient-animation {
+            to {
+                background-position: -200% center;
             }
         }
 
@@ -375,7 +395,7 @@
         <!-- Encabezado de la página -->
         <header>
             <div class="container">
-                <a href="index.html" class="logo"><h1>DeliverySinVueltas</h1></a>
+                <a href="index.html" class="logo"><h1>Delivery Sin Vueltas Rosario</h1></a>
                 <nav id="main-nav"> <!-- Barra de navegación principal -->
                     <ul>
                         <li><a href="index.html">combos</a></li>
