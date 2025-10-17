@@ -162,6 +162,16 @@
             }
         }
 
+        /* Estilo para los títulos de sección con efecto tornasolado */
+        .section-title {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-animation 4s linear infinite;
+        }
+
         /* Animación para el degradado del logo */
         @keyframes gradient-animation {
             to {
@@ -175,25 +185,6 @@
             color: #FFFFFF;
             text-align: center;
             padding: 100px 0;
-        }
-
-        .hero h2 {
-            font-family: var(--font-title);
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        /* --- Estilos de la Sección de Productos --- */
-        #products {
-            padding: 40px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            font-family: var(--font-title);
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            color: var(--accent-color);
         }
 
         /* Cuadrícula que contiene todas las tarjetas de productos */
@@ -241,7 +232,7 @@
         /* Estilo para el botón "Añadir al Carrito" */
         .add-to-cart-btn {
             background: var(--primary-color);
-            color: white;
+            color: #0D0D0D; /* Cambiado a negro para mejor contraste */
             border: none;
             padding: 12px 24px;
             border-radius: 5px;
@@ -407,6 +398,77 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+        .cart-modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
+
+        .clear-cart-btn {
+            background-color: #555;
+            color: white;
+            border: 1px solid #777;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+        .clear-cart-btn:hover {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+        /* --- Estilos de Formas de Pago en el Carrito --- */
+        .payment-options-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
+
+        .payment-options-container h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-family: var(--font-title);
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            justify-content: space-around;
+        }
+
+        .payment-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            background-color: #2a2a2a;
+            width: 100px;
+        }
+
+        .payment-option:hover {
+            background-color: #333;
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary-color);
+        }
+
+        .payment-option img {
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
@@ -458,6 +520,7 @@
 
             <!-- Sección para mostrar los productos -->
             <section id="products" class="container">
+                <h3 class="section-title combos-title">Tus Combos Preferidos</h3>
                 <div id="product-grid" class="product-grid"> 
                     <!-- Los productos se cargarán aquí dinámicamente -->
                 </div>
@@ -483,262 +546,45 @@
             <div id="cart-items-container">
                 <!-- Los items del carrito se insertarán aquí -->
             </div>
+            <!-- Sección de Formas de Pago -->
+            <div class="payment-options-container">
+                <h4>Forma de Pago</h4>
+                <div class="payment-options">
+                    <div class="payment-option" data-payment="Efectivo">
+                        <img src="https://i0.wp.com/ignacioonline.com.ar/wp-content/uploads/2012/09/nuevo-billete-de-100-pesos-con-la-cara-de-Eva-PerC3B3n-frente.jpg?resize=640%2C296" alt="Efectivo">
+                        <span>Efectivo</span>
+                    </div>
+                    <div class="payment-option" data-payment="Mercado Pago">
+                        <img src="https://logowik.com/content/uploads/images/mercado-pago1721074127.logowik.com.webp" alt="Mercado Pago">
+                        <span>Mercado Pago</span>
+                    </div>
+                </div>
+            </div>
             <h3 id="cart-total">Total: $0,00</h3>
-            <button id="checkout-btn" class="add-to-cart-btn">Comprar por WhatsApp</button>
+            <div class="cart-modal-footer">
+                <button id="clear-cart-btn" class="clear-cart-btn">Vaciar Carrito</button>
+                <button id="checkout-btn" class="add-to-cart-btn">Comprar por WhatsApp</button>
+            </div>
         </div>
     </div>
 
+    <!-- Enlace al archivo JS externo -->
+    <script src="main.js"></script>
     <script>
-        // Espera a que todo el contenido HTML de la página esté cargado antes de ejecutar el script
+        // Espera a que todo el contenido HTML de la página esté cargado
         document.addEventListener('DOMContentLoaded', () => {
-            // --- SELECCIÓN DE ELEMENTOS DEL DOM ---
-            // Guardamos en variables los elementos HTML con los que vamos a interactuar
-            const productGrid = document.getElementById('product-grid');
-            const openCartBtn = document.getElementById('open-cart-btn');
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const mainNav = document.getElementById('main-nav');
-            const floatingCart = document.getElementById('floating-cart');
-            const floatingCartCounter = document.getElementById('floating-cart-counter');
-            const cartModal = document.getElementById('cart-modal');
-            const closeCartBtn = document.getElementById('close-cart-btn');
-            const cartItemsContainer = document.getElementById('cart-items-container');
-            const cartTotalElem = document.getElementById('cart-total');
-            const checkoutBtn = document.getElementById('checkout-btn');
-
-            // Función segura para obtener el carrito desde localStorage
-            function getCartFromStorage() {
-                try {
-                    const cartData = localStorage.getItem('shoppingCart');
-                    return cartData ? JSON.parse(cartData) : [];
-                } catch (e) {
-                    console.warn('No se pudo leer el carrito desde localStorage. Puede que estés en modo privado.', e);
-                    return []; // Devuelve un carrito vacío si hay un error
-                }
-            }
-
-            let cart = getCartFromStorage(); // Carga el carrito de forma segura
-
-            // --- PRODUCTOS INTEGRADOS DIRECTAMENTE ---
-            const products = [
-                {
-                    "id": 1,
-                    "name": "Fernet 1L + 2 Coca 2,25",
-                    "price": 33200,
-                    "image": "https://flaming.ar/wp-content/uploads/2022/07/Combos-Aperitivos-03-jpg.webp"
-                },
-                {
-                    "id": 2,
-                    "name": "Cynar + 2 Pomelos",
-                    "price": 20000.00,
-                    "image": "https://acdn-us.mitiendanube.com/stores/001/551/869/products/691-combo-cynar-nelo1-6ec866b6e26d08c74d16514431247371-640-0.jpeg"
-                },
-                {
-                    "id": 3,
-                    "name": "Amargo Obrero + 2 Pomelos 1,5L",
-                    "price": 10000,
-                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2zbd1pDKQRTeAyRKGPnGFRG-orSh6B_zQIQ&s"
-                },
-                {
-                    "id": 4,
-                    "name": "Cinzano + 2 Pomelos 1,5L",
-                    "price": 12000,
-                    "image": "https://sumerlabs.com/sumer-app-90b8f.appspot.com/product_photos%2Fc28526e0ee132353a3a84cec1be9ee7d%2Fbc525210-d857-11ee-9840-6d4a5fd9d051?alt=media&token=e5905a7a-fb13-4f2b-b9ef-dcdbc7e8c6fe"
-                },
-                {
-                    "id": 5,
-                    "name": "Smirnoff + 2 Cepitas 1,5L",
-                    "price": 15000,
-                    "image": "https://http2.mlstatic.com/D_969766-MLA92806661707_092025-C.jpg"
-                },
-                {
-                    "id": 6,
-                    "name": "Gancia + 1 Sprite 2,25L",
-                    "price": 13000,
-                    "image": "https://d22fxaf9t8d39k.cloudfront.net/2ad941db3f111425ac99cf7a605a8369a762994f5cb0e3fc99bf1c9754e5161c12434.jpeg"
-                },
-                {
-                    "id": 7,
-                    "name": "Gin Gordons + 2 Tonicas 1,5L",
-                    "price": 14000,
-                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2HcR2Ft4ZBw3MoNkdWpo58GRdCtUo2Ad8wg&s"
-                }
+            // Define la lista de productos específica para esta página
+            const pageProducts = [
+                { "id": 1, "name": "Fernet 1L + 2 Coca 2,25", "price": 33200, "image": "https://flaming.ar/wp-content/uploads/2022/07/Combos-Aperitivos-03-jpg.webp" },
+                { "id": 2, "name": "Cynar + 2 Pomelos", "price": 20000.00, "image": "https://acdn-us.mitiendanube.com/stores/001/551/869/products/691-combo-cynar-nelo1-6ec866b6e26d08c74d16514431247371-640-0.jpeg" },
+                { "id": 3, "name": "Amargo Obrero + 2 Pomelos 1,5L", "price": 10000, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2zbd1pDKQRTeAyRKGPnGFRG-orSh6B_zQIQ&s" },
+                { "id": 4, "name": "Cinzano + 2 Pomelos 1,5L", "price": 12000, "image": "https://sumerlabs.com/sumer-app-90b8f.appspot.com/product_photos%2Fc28526e0ee132353a3a84cec1be9ee7d%2Fbc525210-d857-11ee-9840-6d4a5fd9d051?alt=media&token=e5905a7a-fb13-4f2b-b9ef-dcdbc7e8c6fe" },
+                { "id": 5, "name": "Smirnoff + 2 Cepitas 1,5L", "price": 15000, "image": "https://http2.mlstatic.com/D_969766-MLA92806661707_092025-C.jpg" },
+                { "id": 6, "name": "Gancia + 1 Sprite 2,25L", "price": 13000, "image": "https://d22fxaf9t8d39k.cloudfront.net/2ad941db3f111425ac99cf7a605a8369a762994f5cb0e3fc99bf1c9754e5161c12434.jpeg" },
+                { "id": 7, "name": "Gin Gordons + 2 Tonicas 1,5L", "price": 14000, "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2HcR2Ft4ZBw3MoNkdWpo58GRdCtUo2Ad8wg&s" }
             ];
-
-            // --- FUNCIONES ---
-
-            // Función para formatear un número como un precio en formato ARS (ej: 20000 -> 20.000,00)
-            function formatPrice(price) {
-                // Usamos Intl.NumberFormat para un formato localizado (español de Argentina)
-                // que usa '.' para miles y ',' para decimales.
-                return new Intl.NumberFormat('es-AR', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                }).format(price);
-            }
-
-            // Función para crear y mostrar las tarjetas de productos en la página
-            function loadProducts() {
-                productGrid.innerHTML = ''; // Limpiamos la cuadrícula
-
-                products.forEach(product => { // Recorremos cada producto de nuestra lista
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}"> <!-- Imagen del producto -->
-                        <h4>${product.name}</h4>
-                        <p class="price">$${formatPrice(product.price)}</p>
-                        <button class="add-to-cart-btn" data-id="${product.id}">Añadir al Carrito</button>
-                    `;
-                    productGrid.appendChild(productCard);
-                });
-            }
-
-            // Función para guardar el carrito en localStorage
-            function saveCart() {
-                try {
-                    localStorage.setItem('shoppingCart', JSON.stringify(cart));
-                } catch (e) {
-                    console.warn('No se pudo guardar el carrito en localStorage. Puede que estés en modo privado.', e);
-                    // Opcional: alertar al usuario.
-                }
-            }
-
-            // Función para actualizar el contador del ícono del carrito
-            function updateCartUI() {
-                const cartCount = cart.length;
-                openCartBtn.textContent = `🛒 (${cartCount})`; // Actualiza el carrito del header
-
-                if (cartCount > 0) {
-                    floatingCart.classList.add('visible');
-                    floatingCartCounter.textContent = cartCount;
-                } else {
-                    floatingCart.classList.remove('visible');
-                }
-            }
-
-            // Función para añadir un producto al array del carrito
-            function addToCart(productId) {
-                // Encontrar el producto en nuestro array de productos
-                const productToAdd = products.find(p => p.id === productId);
-                if (productToAdd) {
-                    // Añadir el producto al carrito
-                    cart.push(productToAdd);
-                    saveCart(); // Guardar carrito en localStorage
-                    console.log('Carrito:', cart); // Para ver en la consola del navegador
-                    updateCartUI();
-                }
-            }
-
-            // Función para renderizar los items en el modal del carrito
-            function renderCartItems() {
-                cartItemsContainer.innerHTML = ''; // Limpiar vista previa
-                if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = '<p>Tu carrito está vacío.</p>';
-                    cartTotalElem.textContent = 'Total: $0,00';
-                    return;
-                }
-
-                let total = 0;
-                cart.forEach((item, index) => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'cart-item';
-
-                    const itemInfo = document.createElement('p');
-                    itemInfo.innerHTML = `${item.name} - <strong>$${formatPrice(item.price)}</strong>`;
-
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-from-cart-btn';
-                    removeBtn.textContent = 'Eliminar';
-                    removeBtn.dataset.index = index; // Usamos el índice para saber qué item borrar
-
-                    itemDiv.appendChild(itemInfo);
-                    itemDiv.appendChild(removeBtn);
-                    cartItemsContainer.appendChild(itemDiv);
-                    total += item.price;
-                });
-
-                cartTotalElem.textContent = `Total: $${formatPrice(total)}`;
-            }
-
-            // Función para abrir/cerrar el modal del carrito
-            function toggleCartModal() {
-                if (cartModal.classList.contains('visible')) {
-                    cartModal.classList.remove('visible');
-                } else {
-                    renderCartItems();
-                    cartModal.classList.add('visible');
-                }
-            }
-
-            // Función para eliminar un producto del carrito
-            function removeFromCart(itemIndex) {
-                cart.splice(itemIndex, 1); // Elimina 1 elemento en la posición 'itemIndex'
-                saveCart(); // Guarda el carrito actualizado
-                updateCartUI(); // Actualiza los contadores
-                renderCartItems(); // Vuelve a dibujar el carrito en el modal
-            }
-
-            // Función para generar el mensaje de WhatsApp y redirigir
-            function handleCheckout() {
-                if (cart.length === 0) return;
-
-                let message = '¡Hola! Quisiera hacer el siguiente pedido:\n\n';
-                let total = 0;
-                cart.forEach(item => {
-                    message += `- ${item.name} ($${formatPrice(item.price)})\n`;
-                    total += item.price;
-                });
-                message += `\n*Total: $${formatPrice(total)}*`;
-
-                const whatsappUrl = `https://wa.me/5493415646850?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-            }
-
-            // --- EVENT LISTENERS (Detectores de interacciones) ---
-
-            // Usamos delegación de eventos para manejar los clics en los botones
-            productGrid.addEventListener('click', (event) => {
-                // Verificamos si el clic fue en un botón de "Añadir al Carrito"
-                if (event.target.classList.contains('add-to-cart-btn')) {
-                    const button = event.target;
-                    const productId = parseInt(button.dataset.id); // Obtenemos el ID del producto desde el atributo data-id
-                    addToCart(productId);
-
-                    // Damos feedback visual al usuario
-                    button.textContent = '¡Añadido!';
-                    button.disabled = true;
-                    // Después de 1.5 segundos, restauramos el botón a su estado original
-                    setTimeout(() => {
-                        button.textContent = 'Añadir al Carrito';
-                        button.disabled = false;
-                    }, 1500); // Se resetea después de 1.5 segundos
-                }
-            });
-
-            // Event listener para el botón del menú hamburguesa
-            hamburgerBtn.addEventListener('click', () => {
-                mainNav.classList.toggle('nav-active'); // Añade o quita la clase que muestra/oculta el menú
-            });
-
-            // Event listeners para abrir y cerrar el modal del carrito
-            openCartBtn.addEventListener('click', toggleCartModal);
-            floatingCart.addEventListener('click', toggleCartModal);
-            closeCartBtn.addEventListener('click', toggleCartModal);
-            checkoutBtn.addEventListener('click', handleCheckout);
-
-            // Event listener para los botones de eliminar en el carrito (usando delegación)
-            cartItemsContainer.addEventListener('click', (event) => {
-                if (event.target.classList.contains('remove-from-cart-btn')) {
-                    const itemIndex = parseInt(event.target.dataset.index);
-                    removeFromCart(itemIndex);
-                }
-            });
-
-            // --- INICIALIZACIÓN ---
-            // Carga los productos directamente al cargar la página
-            loadProducts();
-            // Actualiza la UI del carrito al cargar la página por si hay items guardados
-            updateCartUI();
+            // Llama a la función de inicialización del script principal, pasándole los productos
+            initializeShop(pageProducts);
         });
     </script>
 </body>
