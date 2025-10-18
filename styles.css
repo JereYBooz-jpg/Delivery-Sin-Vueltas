@@ -16,6 +16,7 @@ body {
     color: var(--light-text);
     margin: 0;
     padding: 0;
+    background-image: url('https://occ-0-8407-90.1.nflxso.net/dnm/api/v6/Z-WHgqd_TeJxSuha8aZ5WpyLcX8/AAAABXkvV6Z0oypiiKnzyzGYTfQLFu5DvrDCe3iM4cZji4LNkL7_ZWRlf_PAwEGt-5R-nLDP1LKMhLR_HCHviRJjb1pSGJqc6u5wIomS.jpg?r=b60');
     background-size: cover; /* Cubre todo el espacio disponible */
     background-position: center; /* Centra la imagen */
     background-attachment: fixed; /* La imagen de fondo no se mueve con el scroll */
@@ -160,21 +161,17 @@ nav ul li a:hover {
 
 /* Estilo para los títulos de sección con efecto tornasolado */
 .section-title {
-    text-align: center;
-    font-family: var(--font-title);
-    font-size: 5cm;
-    margin-bottom: 40px;
     background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     animation: gradient-animation 4s linear infinite;
-}
-
-/* Estilo específico para el título de combos para hacerlo más grande */
-.combos-title {
-    font-size: 5cm; /* Aumentamos el tamaño de la fuente */
+    font-family: var(--font-title);
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 /* Animación para el degradado del logo */
@@ -186,6 +183,7 @@ nav ul li a:hover {
 
 /* --- Estilos de la Sección Principal (Hero) --- */
 .hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
     color: #FFFFFF;
     text-align: center;
     padding: 100px 0;
@@ -195,6 +193,23 @@ nav ul li a:hover {
     font-family: var(--font-title);
     font-size: 3rem;
     margin-bottom: 10px;
+}
+
+/* --- Media Queries para Responsividad --- */
+@media (max-width: 768px) {
+    .hero {
+        padding: 60px 20px;
+    }
+    .hero h2 {
+        font-size: 2.2rem;
+    }
+    .section-title {
+        font-size: 2.2rem;
+    }
+    .social-icon img {
+        width: 80px;
+        height: 80px;
+    }
 }
 
 /* --- Estilos de la Sección de Productos --- */
@@ -536,20 +551,15 @@ footer .warning {
 }
 
 /* --- Estilos específicos para la página de contacto --- */
-.contact-page-body {
+.contact-page-body, .page-body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.contact-page-main {
+.main-content {
     flex-grow: 1;
 }
-
-.contact-page-footer {
-    margin-top: auto; /* Empuja el footer al final */
-}
-
 /* --- Animación de Añadir al Carrito --- */
 .fly-to-cart-img {
     position: fixed;
