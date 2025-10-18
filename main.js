@@ -29,6 +29,7 @@ function initializeShop(pageProducts = []) {
     const checkoutBtn = document.getElementById('checkout-btn');
     const clearCartBtn = document.getElementById('clear-cart-btn');
 
+    let address = '';
     let selectedPaymentMethod = null;
 
     // --- FUNCIONES DE MANEJO DEL CARRITO ---
@@ -63,7 +64,7 @@ function initializeShop(pageProducts = []) {
     function updateCartUI() {
         const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
         if (openCartBtn) {
-            openCartBtn.textContent = `🛒 (${cartCount})`;
+            openCartBtn.textContent = `🛒`;
         }
 
         if (floatingCart) {
@@ -79,16 +80,17 @@ function initializeShop(pageProducts = []) {
         }
     }
 
-    function addToCart(productId) {
+    function addToCart(productId, quantity = 1) {
         const productToAdd = pageProducts.find(p => p.id === productId);
         if (!productToAdd) return;
+        if (quantity <= 0) return;
 
         const existingItem = cart.find(item => item.id === productId);
 
         if (existingItem) {
-            existingItem.quantity++;
+            existingItem.quantity += quantity;
         } else {
-            cart.push({ ...productToAdd, quantity: 1 });
+            cart.push({ ...productToAdd, quantity: quantity });
         }
         saveCart();
         updateCartUI();
@@ -138,6 +140,10 @@ function initializeShop(pageProducts = []) {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'cart-item';
 
+            const itemImage = document.createElement('img');
+            itemImage.src = item.image;
+            itemImage.alt = item.name;
+
             const itemDetails = document.createElement('div');
             itemDetails.className = 'cart-item-details';
             itemDetails.innerHTML = `
@@ -154,6 +160,7 @@ function initializeShop(pageProducts = []) {
             removeBtn.textContent = 'Eliminar';
             removeBtn.dataset.index = index;
 
+            itemDiv.appendChild(itemImage);
             itemDiv.appendChild(itemDetails);
             itemDiv.appendChild(removeBtn);
             cartItemsContainer.appendChild(itemDiv);
@@ -182,6 +189,12 @@ function initializeShop(pageProducts = []) {
             alert("Por favor, selecciona una forma de pago.");
             return;
         }
+        
+        const addressInput = document.getElementById('address-input');
+        if (!addressInput.value.trim()) {
+            alert("Por favor, ingresa tu dirección de envío.");
+            return;
+        }
 
         let message = '¡Hola! Quisiera hacer el siguiente pedido:\n\n';
         let total = 0;
@@ -189,6 +202,7 @@ function initializeShop(pageProducts = []) {
             message += `- ${item.name} (x${item.quantity}) - $${formatPrice(item.price * item.quantity)}\n`;
             total += item.price * item.quantity;
         });
+        message += `\n*Dirección de envío: ${addressInput.value}*`;
         message += `\n*Forma de pago: ${selectedPaymentMethod}*`;
         message += `\n\n*Total: $${formatPrice(total)}*`;
 
@@ -209,6 +223,11 @@ function initializeShop(pageProducts = []) {
                 <img src="${product.image}" alt="${product.name}">
                 <h4>${product.name}</h4>
                 <p class="price">$${formatPrice(product.price)}</p>
+                <div class="card-quantity-controls">
+                    <button class="quantity-btn" onclick="this.nextElementSibling.stepDown()">-</button>
+                    <input type="number" class="card-quantity-input" value="1" min="1" step="1" id="quantity-${product.id}">
+                    <button class="quantity-btn" onclick="this.previousElementSibling.stepUp()">+</button>
+                </div>
                 <button class="add-to-cart-btn" data-id="${product.id}">Añadir al Carrito</button>
             `;
             productGrid.appendChild(productCard);
@@ -222,6 +241,8 @@ function initializeShop(pageProducts = []) {
             if (event.target.classList.contains('add-to-cart-btn')) {
                 const addButton = event.target;
                 const productId = parseInt(addButton.dataset.id);
+                const quantityInput = document.getElementById(`quantity-${productId}`);
+                const quantity = parseInt(quantityInput.value);
                 const productCard = addButton.closest('.product-card');
                 const productImage = productCard.querySelector('img');
 
@@ -260,10 +281,11 @@ function initializeShop(pageProducts = []) {
                 }
 
                 // --- Lógica existente del carrito ---
-                addToCart(productId);
+                addToCart(productId, quantity);
 
                 addButton.textContent = '¡Añadido!';
                 setTimeout(() => {
+                    if (quantityInput) quantityInput.value = 1; // Resetea la cantidad a 1
                     addButton.textContent = 'Añadir al Carrito';
                 }, 1000);
             }

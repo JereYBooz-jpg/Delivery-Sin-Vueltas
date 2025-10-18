@@ -1,7 +1,7 @@
 /* --- Variables y Estilos Globales --- */
 :root {
-    --primary-color: #39FF14; /* Verde Flúor/Neón para botones */
-    --accent-color: #00FFFF;  /* Cian/Aqua Flúor para títulos */
+    --primary-color: #FFD700; /* Dorado para botones */
+    --accent-color: #FF8C00;  /* Naranja oscuro para títulos */
     --dark-bg: #0D0D0D;       /* Fondo negro intenso */
     --dark-card-bg: #1A1A1A;  /* Fondo para tarjetas, gris muy oscuro */
     --light-text: #FFFFFF;    /* Blanco puro para máximo contraste */
@@ -161,12 +161,13 @@ nav ul li a:hover {
 
 /* Estilo para los títulos de sección con efecto tornasolado */
 .section-title {
-    background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: gradient-animation 4s linear infinite;
+    background-color: rgba(26, 26, 26, 0.85); /* Fondo oscuro semi-transparente */
+    color: var(--light-text); /* Texto blanco para contraste */
+    border: 2px solid var(--primary-color); /* Borde con el color primario (dorado) */
+    border-radius: 10px; /* Esquinas redondeadas */
+    padding: 10px 25px; /* Espaciado interno para crear el marco */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); /* Sombra exterior para un efecto de brillo */
+    display: inline-block; /* Hace que el marco se ajuste al contenido */
     font-family: var(--font-title);
     font-size: 3rem;
     text-align: center;
@@ -204,6 +205,7 @@ nav ul li a:hover {
         font-size: 2.2rem;
     }
     .section-title {
+        padding: 8px 20px;
         font-size: 2.2rem;
     }
     .social-icon img {
@@ -215,6 +217,7 @@ nav ul li a:hover {
 /* --- Estilos de la Sección de Productos --- */
 #products {
     padding: 40px 0;
+    text-align: center; /* Centra el título que ahora es inline-block */
 }
 
 /* Cuadrícula que contiene todas las tarjetas de productos */
@@ -257,6 +260,24 @@ nav ul li a:hover {
     font-weight: bold;
     color: var(--light-text);
     margin-bottom: 15px;
+}
+
+/* Estilos para el control de cantidad en la tarjeta de producto */
+.card-quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.card-quantity-input {
+    width: 50px;
+    text-align: center;
+    background-color: #333;
+    color: var(--light-text);
+    border: 1px solid #555;
+    border-radius: 4px;
 }
 
 /* Estilo para el botón "Añadir al Carrito" */
@@ -406,6 +427,21 @@ footer .warning {
     padding-bottom: 15px;
     margin-bottom: 20px;
 }
+/* Estilo para el campo de dirección en el modal */
+.cart-address-input {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: var(--light-text);
+    font-family: var(--font-body);
+}
+
+.cart-address-input::placeholder {
+    color: #aaa;
+}
 
 #close-cart-btn {
     background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;
@@ -418,6 +454,14 @@ footer .warning {
     margin-bottom: 10px;
     border-bottom: 1px solid #333;
     padding-bottom: 10px;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
 }
 
 .remove-from-cart-btn {
