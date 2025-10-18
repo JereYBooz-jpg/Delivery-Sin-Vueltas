@@ -39,6 +39,10 @@ header {
     background: var(--dark-card-bg);
     padding: 1rem 0;
     border-bottom: 1px solid #444;
+    position: sticky; /* Hace que el encabezado se quede fijo */
+    top: 0; /* Lo pega en la parte superior de la pantalla */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    z-index: 1010; /* Lo pone por encima de otros elementos al hacer scroll */
 }
 
 header .container {

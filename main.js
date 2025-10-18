@@ -190,7 +190,7 @@ function initializeShop(pageProducts = []) {
             return;
         }
         
-        const addressInput = document.getElementById('address-input');
+        const addressInput = cartModal.querySelector('#address-input');
         if (!addressInput.value.trim()) {
             alert("Por favor, ingresa tu dirección de envío.");
             return;
